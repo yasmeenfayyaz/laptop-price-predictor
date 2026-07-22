@@ -14,8 +14,8 @@ try:
     df = pickle.load(open('df.pkl', 'rb'))
     pipe = pickle.load(open('pipe.pkl', 'rb'))
 except Exception as e:
-    st.error(f"⚠️ Could not load model or dataset file. Please make sure 'df.pkl' and 'pipe.pkl' are uploaded to the main GitHub repository folder.\n\nDetails: {e}")
-    st.stop()  # Stops execution here so NameError won't occur below
+    st.error(f"⚠️ Could not load model or dataset file. Please check files in repository.\n\nDetails: {e}")
+    st.stop()
 
 # 3. User Inputs Form
 col1, col2 = st.columns(2)
@@ -49,11 +49,16 @@ if st.button('Predict Price 🚀'):
     touchscreen_val = 1 if touchscreen == 'Yes' else 0
     ips_val = 1 if ips == 'Yes' else 0
 
-    # Create Query DataFrame (Feature names match model training exact order)
+    # Memory String Re-creation (just in case model expects Memory column)
+    memory_str = f"{ssd}GB SSD" if ssd > 0 else f"{hdd}GB HDD"
+
+    # Query DataFrame with missing 'Inches' and 'Memory' added
     query = pd.DataFrame([{
         'Company': company,
         'TypeName': type_name,
+        'Inches': screen_size,       # Added missing feature
         'Ram': ram,
+        'Memory': memory_str,        # Added missing feature
         'Weight': weight,
         'Touchscreen': touchscreen_val,
         'Ips': ips_val,
@@ -67,6 +72,6 @@ if st.button('Predict Price 🚀'):
 
     # Model Prediction
     prediction = pipe.predict(query)[0]
-    predicted_price = np.exp(prediction)  # Inverse log transform
+    predicted_price = np.exp(prediction)
 
     st.success(f"💰 Estimated Laptop Price: **${int(predicted_price):,}**")
