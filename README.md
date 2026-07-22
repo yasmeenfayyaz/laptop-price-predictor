@@ -39,7 +39,7 @@ Buying a laptop can be challenging due to varying price points across different 
 
 ## 🚀 Live Demo & Repository Files
 
-* 🌐 **Live Web App:** [Paste Your Deployed Streamlit Link Here]
+* 🌐 **Live Web App:** https://laptop-price-predictor-application.streamlit.app/
 
 ### Repository Structure:
 ```text
